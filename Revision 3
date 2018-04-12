@@ -1,0 +1,102 @@
+#include<stdio.h>
+#include<conio.h>
+int i,a[20],a1[20],x,y;
+struct process
+{
+	int no;
+	int arrival_t;
+	int burst_t;
+	int completion_t;
+	int turnaround_t;
+	int waiting_t;
+	int pos;
+	int tmp1;
+	int tmp2;
+}pro[20];
+
+	
+int main()
+{
+	//Input from the user
+	int n,i,j,loc=a1[y],v=1,c_time,process_queue[n];
+	printf("Enter total Number of Processes to be included:\n ");
+	scanf("%d",&n);
+	printf("Enter the Arrival time and Burst Time of Each Processes:\n");
+	for(i=0;i<n;i++)
+	{
+	  printf("Enter Arrival Time of process %d::\n",i+1);
+	  scanf("%d",&pro[i].arrival_t);
+	  printf("Enter Burst Time of process %d  ::\t",i+1);
+	  scanf("%d",&pro[i].burst_t);
+	  pro[i].no=i+1;
+	}
+	
+	
+	// sort the arrival time  and burst time	
+	 for( i=0;i<n;i++)
+	  {
+		for(j=0;j<(n-1)-i;j++)
+		{
+			
+			if(pro[j].arrival_t>pro[j+1].arrival_t || pro[j].burst_t>pro[j+1].burst_t)
+			{
+				a[x++]=i;
+				a1[y++]=j;
+				pro[j].tmp1=pro[j].arrival_t;
+				pro[j].arrival_t=pro[j+1].arrival_t;
+				pro[j+1].arrival_t=pro[j].tmp1;
+		
+				pro[j].tmp2=pro[j].burst_t;
+				pro[j].burst_t=pro[j+1].burst_t;
+				pro[j+1].burst_t=pro[j].tmp2;
+			
+			}
+			
+     	}  
+	 }
+
+	 
+	 
+	 	 
+   //Increment the value of burst time by 3
+    for(i=0;i<n;i++)
+       c_time=pro[i].burst_t+3;
+   
+  	  
+	  
+	  
+	  //SJF
+   
+    printf("Processing P%dfrom 3 to %d seconds\n",pro[loc].no,c_time);
+	pro[loc].pos = 1;
+	pro[loc].completion_t = c_time;
+	
+    process_queue[0] = pro[loc].no;
+	i=1;
+	for(i=0;i<n;i++) // initilaise all position with zero
+	  pro[i].pos=0;
+	  
+	int process_count = 1;
+	while(process_count!=n)
+	{
+		if(pro[i].pos!=1 && pro[i].arrival_t <= c_time)
+		{
+			if(pro[i].burst_t>10)
+			{
+				printf("Processing P %d from %d to %d seconds\n",pro[i].no,c_time,c_time + 10);
+				c_time += 10;
+				pro[i].burst_t -= 10;
+			}
+			else
+			{
+				printf("Processing P %d from %d to %d seconds\n",pro[i].no,c_time,c_time + pro[i].burst_t);
+				c_time += pro[i].burst_t;
+				process_queue[v] = pro[i].no;
+				v++;
+				pro[i].pos = 1;
+				pro[i].completion_t = c_time;
+				process_count++;
+			}
+		}
+		i = (i+1)%n;
+	}
